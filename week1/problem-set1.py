@@ -10,8 +10,8 @@ s = "azcbobobegghakl"
 vowelsCount = 0
 
 
-for word in s:
-    if word == "a" or word == "e" or word == "i" or word == "o" or word == "u":
+for letter in s:
+    if letter == "a" or letter == "e" or letter == "i" or letter == "o" or letter == "u":
         vowelsCount += 1
 
 
