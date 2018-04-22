@@ -37,6 +37,4 @@ def gcdRecur(a, b):
         minValue = min(a, b)
         maxValue = max(a, b)
         
-        print(minValue, maxValue)
-        
         return gcdRecur(minValue, maxValue % minValue)
