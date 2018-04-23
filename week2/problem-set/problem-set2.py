@@ -35,7 +35,3 @@ def getMinimumMonthlyPayment(initialBalance, annualInterestRate):
     return guess
     
 print('Lowest Payment:', getMinimumMonthlyPayment(balance, annualInterestRate))    
-    
-
-#remainingBalance = getRemainingAnnualBalance(balance, annualInterestRate, monthlyPaymentRate)
-#print('Remaining balance:', round(remainingBalance, 2))
