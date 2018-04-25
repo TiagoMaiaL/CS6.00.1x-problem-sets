@@ -72,9 +72,9 @@ def getGuessedWord(secretWord, lettersGuessed):
     
     for letter in secretWord:
         if letter in lettersGuessed:
-            word += letter
+            word += letter + ' '
         else:
-            word += '_'
+            word += '_ '
     
     return word
 
