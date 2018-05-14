@@ -124,9 +124,57 @@ def playGame(wordList):
 
     wordList: list (string)
     """
-    # TO DO... <-- Remove this comment when you code this function
-    print("playGame not yet implemented.") # <-- Remove this when you code this function
+    hand = None
+    
+    # The user enters the game.
+    while True:
+        
+        # Ask the user to enter the command:
+        command = input('Enter n to deal a new hand, r to replay the last hand, or e to end game: ')
+        
+        # If the command is to exit:
+        if command == 'e':
+            break
+        
+        # If the command wasn't valid:
+        elif command != 'n' and command != 'r':
+            print('Invalid command.')
+            
+        # Otherwise, the user wants to play:
+        else:
+            
+            # If the hand is None, the user needs to play a hand before repeating.
+            if command == 'r' and hand is None:
+                print('You have not played a hand yet. Please play a new hand first!')
+                continue
+            elif command == 'n':
+                # Otherwise, deal the hand.
+                hand = dealHand(HAND_SIZE)
 
+            # User gets to choose who should play.
+            while True:
+    
+                # Ask the user to choose a player
+                playerCommand = input('Enter u to have yourself play, c to have the computer play: ')
+            
+                
+            
+                # If the user has chosen to play:
+                if playerCommand == 'u':
+                    # let the user play.
+                    playHand(hand, wordList, HAND_SIZE)
+                
+                # If the user has chosen the computer to play:
+                elif playerCommand == 'c':
+                    # let the computer play.
+                    compPlayHand(hand, wordList, HAND_SIZE)
+                    
+                # If the command wasn't valid:
+                else:
+                    print('Invalid command.')
+                    continue
+                
+                break
         
 #
 # Build data structures used for entire session and play game
