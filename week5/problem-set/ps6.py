@@ -102,7 +102,31 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        assert shift >= 0 and shift < len(string.ascii_lowercase)
+        
+        shiftedLettersMap = {}
+        lowercaseLetters = list(string.ascii_lowercase)
+        uppercaseLetters = list(string.ascii_uppercase)
+        
+        # for each letter index in the alphabet:
+        for letterIndex in range(0, len(string.ascii_lowercase)):
+
+            lowercaseLetter = lowercaseLetters[letterIndex]
+            uppercaseLetter = uppercaseLetters[letterIndex]
+            
+            # determine the shifted index:
+            shiftedIndex = letterIndex + shift
+            
+            # if the shifted index is out of range:
+            if shiftedIndex >= len(string.ascii_lowercase):
+                # re-assign the shifted index to be the rest of
+                # the division between the current index and the total of letters(26).
+                shiftedIndex = shiftedIndex % len(string.ascii_lowercase)
+                
+            shiftedLettersMap[lowercaseLetter] = lowercaseLetters[shiftedIndex]
+            shiftedLettersMap[uppercaseLetter] = uppercaseLetters[shiftedIndex]
+            
+        return shiftedLettersMap
 
     def apply_shift(self, shift):
         '''
@@ -116,7 +140,23 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        assert shift >= 0 and shift < len(string.ascii_lowercase)
+        
+        shifttedLettersMap = self.build_shift_dict(shift)
+        cypherText = ""
+        
+        for letter in self.message_text:
+            # check if the letter is in the alphabet:
+            if letter in shifttedLettersMap:
+                # add the shiftted word to the cypherText
+                cypherText += shifttedLettersMap[letter]
+                
+            # if the string is not a letter:
+            else:                 
+                # add it without change
+                cypherText += letter
+        
+        return cypherText
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -207,11 +247,15 @@ class CiphertextMessage(Message):
         '''
         pass #delete this line and replace with your code here
 
+# Testing the base class:
+message = Message('Testing message.')
+print('Expected cypher text is "Vguvkpi oguucig" (shifted by 2):', message.apply_shift(2))
+
 #Example test case (PlaintextMessage)
 plaintext = PlaintextMessage('hello', 2)
 print('Expected Output: jgnnq')
 print('Actual Output:', plaintext.get_message_text_encrypted())
-    
+
 #Example test case (CiphertextMessage)
 ciphertext = CiphertextMessage('jgnnq')
 print('Expected Output:', (24, 'hello'))
