@@ -102,7 +102,7 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        assert shift >= 0 and shift < len(string.ascii_lowercase)
+        assert shift >= 0 and shift < len(string.ascii_lowercase), 'Shift should be greater than or equal to 0 and smaller than 26'
         
         shiftedLettersMap = {}
         lowercaseLetters = list(string.ascii_lowercase)
@@ -140,7 +140,7 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        assert shift >= 0 and shift < len(string.ascii_lowercase)
+        assert shift >= 0 and shift < len(string.ascii_lowercase), 'Shift should be greater than or equal to 0 and smaller than 26'
         
         shifttedLettersMap = self.build_shift_dict(shift)
         cypherText = ""
@@ -176,7 +176,9 @@ class PlaintextMessage(Message):
         Hint: consider using the parent class constructor so less 
         code is repeated
         '''
-        pass #delete this line and replace with your code here
+        Message.__init__(self, text)
+
+        self.change_shift(shift)
 
     def get_shift(self):
         '''
@@ -184,7 +186,7 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encrypting_dict(self):
         '''
@@ -192,7 +194,7 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encrypting_dict
         '''
-        pass #delete this line and replace with your code here
+        return self.encrypting_dict.copy()
 
     def get_message_text_encrypted(self):
         '''
@@ -200,7 +202,7 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
@@ -213,7 +215,15 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
+        assert shift >= 0 and shift < len(string.ascii_lowercase), 'Shift should be greater than or equal to 0 and smaller than 26'
+        
+        self.shift = shift
+        
+        # create and add encrypting dict as an instance var.
+        self.encrypting_dict = Message.build_shift_dict(self, self.shift)
+
+        # encrypt the message and add it as an instance var.
+        self.message_text_encrypted = Message.apply_shift(self, self.shift)
 
 
 class CiphertextMessage(Message):
@@ -227,7 +237,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        Message.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -245,7 +255,30 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
+        
+        maximumShifts = len(string.ascii_lowercase)
+        bestShift = 0
+        bestWordsCount = 0
+        
+        for shiftGuess in range(0, maximumShifts):
+            
+            # Decrypt the whole text message with the current shift guess.
+            decryptedText = self.apply_shift(shiftGuess)
+            
+            # Get the number of valid words after the decryption:
+            validWordsCount = 0
+            
+            for word in decryptedText.split(' '):
+                if is_word(self.valid_words, word):
+                    validWordsCount += 1
+                
+            
+            # If the current count of valid words is the higher so far:
+            if validWordsCount > bestWordsCount:
+                bestShift = shiftGuess
+                bestWordsCount = validWordsCount
+            
+        return (bestShift, self.apply_shift(bestShift))
 
 # Testing the base class:
 message = Message('Testing message.')
